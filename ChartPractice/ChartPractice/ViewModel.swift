@@ -9,19 +9,19 @@ import Foundation
 
 final class ViewModel: ObservableObject {
     
-    @Published var list: [String: [PriceEntry]] = [:]
+    @Published var list: [Symbol: [PriceEntry]] = [:]
+    @Published var selected: PriceEntry? = nil
     
     let jsconDecoder: JSONDecoder = JSONDecoder()
 
     
-    func requestAPI(queryValue: String) {
+    func requestAPI(queryValue: Symbol) {
         
-        
-        let query: String  = "https://api.coingecko.com/api/v3/coins/\(queryValue)/market_chart?vs_currency=usd&days=30&interval=daily&precision=3"
+        let query: String  = "https://api.coingecko.com/api/v3/coins/\(queryValue.rawValue)/market_chart?vs_currency=usd&days=30&interval=daily&precision=3"
         let encodedQuery: String = query.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)!
         let queryURL: URL = URL(string: encodedQuery)!
         
-        let apikey = "API_KEY"
+        let apikey = "CG-Ba2fh8afp4jtTWrDtzdqpoPp"
        
         var requestURL = URLRequest(url: queryURL)
         requestURL.addValue(apikey, forHTTPHeaderField: "x_cg_pro_api_key")
@@ -35,20 +35,29 @@ final class ViewModel: ObservableObject {
                 let searchInfo = try self.jsconDecoder.decode(PricesResponse.self, from: data)
                 print("===== \(queryValue)의 결과 ===== ")
                 print(searchInfo)
-                self.list[queryValue] = searchInfo.prices
+                let firstTimestamp = Double(searchInfo.prices.first?.timestamp ?? Date.timeIntervalSinceReferenceDate)
+                DispatchQueue.main.async {
+                    self.list[queryValue] = searchInfo.prices.map { item in
+                        let newItem = PriceEntry(timestamp: item.timestamp - firstTimestamp, price: item.price * 1300)
+                        return newItem
+                    }
+                }
             } catch {
+                print(error.localizedDescription)
             }
         }
         task.resume()
     }
 }
 
-// Define a struct for the individual price entries
-struct PriceEntry: Codable, Hashable {
-    let timestamp: Double
+struct PriceEntry: Codable, Hashable, Comparable {
+    static func < (lhs: PriceEntry, rhs: PriceEntry) -> Bool {
+        lhs.price < rhs.price
+    }
+    
+    var timestamp: Double
     let price: Double
     
-    // Custom initializer to map the array elements to the properties
     init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         timestamp = try container.decode(Double.self)
@@ -61,7 +70,23 @@ struct PriceEntry: Codable, Hashable {
     }
 }
 
-// Define a struct for the main response containing the array of prices
 struct PricesResponse: Codable, Hashable {
     let prices: [PriceEntry]
+}
+
+enum Symbol: String, CaseIterable {
+    case bitcoin
+    case ethereum
+    case solana
+    
+    var symbol: String {
+        switch self {
+        case .bitcoin:
+            return "BTC"
+        case .ethereum:
+            return "ETH"
+        case .solana:
+            return "SOL"
+        }
+    }
 }

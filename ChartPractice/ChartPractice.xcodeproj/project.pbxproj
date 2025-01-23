@@ -12,6 +12,7 @@
 		D618F6E02C19727A001292FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D618F6DF2C19727A001292FC /* Assets.xcassets */; };
 		D618F6E32C19727A001292FC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D618F6E22C19727A001292FC /* Preview Assets.xcassets */; };
 		D618F6EA2C197FC6001292FC /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D618F6E92C197FC6001292FC /* ViewModel.swift */; };
+		D67A840B2D420BC5002D8EC1 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A840A2D420BC3002D8EC1 /* String+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		D618F6DF2C19727A001292FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D618F6E22C19727A001292FC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D618F6E92C197FC6001292FC /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		D67A840A2D420BC3002D8EC1 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 		D618F6DA2C197279001292FC /* ChartPractice */ = {
 			isa = PBXGroup;
 			children = (
+				D67A840A2D420BC3002D8EC1 /* String+.swift */,
 				D618F6DB2C197279001292FC /* ChartPracticeApp.swift */,
 				D618F6DD2C197279001292FC /* ContentView.swift */,
 				D618F6DF2C19727A001292FC /* Assets.xcassets */,
@@ -142,6 +145,7 @@
 			files = (
 				D618F6DE2C197279001292FC /* ContentView.swift in Sources */,
 				D618F6EA2C197FC6001292FC /* ViewModel.swift in Sources */,
+				D67A840B2D420BC5002D8EC1 /* String+.swift in Sources */,
 				D618F6DC2C197279001292FC /* ChartPracticeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -284,7 +288,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -314,7 +318,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
