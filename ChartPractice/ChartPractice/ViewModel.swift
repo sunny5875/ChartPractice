@@ -11,6 +11,13 @@ final class ViewModel: ObservableObject {
     
     @Published var list: [Symbol: [PriceEntry]] = [:]
     @Published var selected: PriceEntry? = nil
+    @Published var balanceList: [(String, Int)] = [
+        ("Bitcoin", 3),
+        ("Ethereum", 5),
+        ("Solana", 1),
+        ("Tron", 4),
+        ("그 외", 4)
+    ]
     
     let jsconDecoder: JSONDecoder = JSONDecoder()
 

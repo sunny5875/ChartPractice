@@ -37,13 +37,16 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
-                rateLargeView()
-                rateView()
+            ScrollView {
+                VStack(spacing: 20) {
+                    totalAmount
+                    rateLargeView()
+                    rateView()
+                    Spacer()
+                }
+                .padding()
+                .navigationTitle("크립토 환율")
             }
-            .padding()
-            .navigationTitle("크립토 환율")
-            .background(Color.black.opacity(0.03))
         }
         .task {
             await withTaskGroup(of: Void.self) { group in
@@ -55,6 +58,58 @@ struct ContentView: View {
             }
         }
     }
+    
+    var totalAmount: some View {
+        Chart {
+            ForEach(0..<viewModel.balanceList.count, id: \.self) {i in
+                BarMark(
+                    x: .value("amount", viewModel.balanceList[i].1)
+                )
+                .foregroundStyle(by: .value("type", viewModel.balanceList[i].0))
+                .clipShape(clipShape(forIndex: i))
+                .foregroundStyle([Color.red, Color.orange, Color.purple, Color.blue, Color.gray, Color.green].randomElement() ?? .gray)
+                
+                if i != viewModel.balanceList.count-1 {
+                    BarMark(
+                        x: .value("Separator", 0.1)
+                    )
+                      .foregroundStyle(.clear)
+                }
+            }
+        }
+        .chartYAxis(.hidden)
+        .chartXAxis(.hidden)
+        .frame(height: 50)
+        .padding(.vertical, 24)
+        .padding(.horizontal, 12)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+    
+    func clipShape(forIndex i: Int) -> UnevenRoundedRectangle {
+        if i == 0 {
+            return UnevenRoundedRectangle(
+                topLeadingRadius: 12,
+                bottomLeadingRadius: 12,
+                bottomTrailingRadius: 2,
+                topTrailingRadius: 2
+            )
+        } else if i == viewModel.balanceList.count - 1 {
+            return UnevenRoundedRectangle(
+                topLeadingRadius: 2,
+                bottomLeadingRadius: 2,
+                bottomTrailingRadius: 12,
+                topTrailingRadius: 12
+            )
+        } else {
+            return UnevenRoundedRectangle(
+                topLeadingRadius: 2,
+                bottomLeadingRadius: 2,
+                bottomTrailingRadius: 2,
+                topTrailingRadius: 2
+            )
+        }
+    }
+    
     @ViewBuilder
     func rateLargeView() -> some View {
         if let list = viewModel.list[Symbol.bitcoin] {
@@ -162,8 +217,9 @@ struct ContentView: View {
                     }
                 }
             }
+            .chartXScale(domain: calculateXDomain(list))
             .chartYScale(domain: calculateYDomain(list))
-            .chartXAxis(.hidden)
+            .chartYAxis(.hidden)
             .chartOverlay { proxy in
                 GeometryReader { geo in
                     Rectangle()
@@ -195,6 +251,15 @@ struct ContentView: View {
     private func calculateYDomain(_ list: [PriceEntry]) -> ClosedRange<Double> {
         guard let minPrice = list.min()?.price,
                 let maxPrice = list.max()?.price else {
+            return 0...1
+        }
+        return minPrice...maxPrice
+    }
+    
+    private func calculateXDomain(_ list: [PriceEntry]) -> ClosedRange<Double> {
+        let date = list.map { $0.timestamp}
+        guard let minPrice = date.min(),
+                let maxPrice = date.max() else {
             return 0...1
         }
         return minPrice...maxPrice
